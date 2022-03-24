@@ -1,0 +1,7 @@
+node_modules/
+old/
+cert/
+keys/
+authorized_keys
+data/
+package-lock.json

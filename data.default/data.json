@@ -1,0 +1,16 @@
+{
+  "1": {
+    "id": 1,
+    "status": "offline",
+    "ip": "192.168.0.91",
+    "name": "TRAPS-01",
+    "disabled": false
+  },
+  "2": {
+    "id": 2,
+    "status": "offline",
+    "ip": "192.168.0.102",
+    "name": "TRAPS-02",
+    "disabled": false
+  }
+}

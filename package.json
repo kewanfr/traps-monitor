@@ -1,0 +1,18 @@
+{
+  "name": "traps-monit",
+  "version": "1.0.0",
+  "description": "battery and wifi monitor for FFCK TRAPS devices",
+  "main": "main.js",
+  "dependencies": {
+    "express": "^4.17.3",
+    "prompt-sync": "^4.2.0",
+    "readline": "^1.3.0",
+    "socket.io": "^4.4.1"
+  },
+  "scripts": {
+    "test": "nome main.js 2",
+    "start": "node main.js 1"
+  },
+  "author": "kewanb",
+  "license": "MIT"
+}
