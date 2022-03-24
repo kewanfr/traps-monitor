@@ -59,8 +59,8 @@ socket.on('devices', function (msg) {
   db.devices = msg;
   if (pageUrl == "devices") refreshDevices();
 });
-
-var baseUrl = 'http://localhost:8000';
+var baseUrl = window.location.origin;
+// var baseUrl = 'http://localhost:8000';
 async function getData(url = '') {
   const response = await fetch(`${baseUrl}${url}`, {
     method: 'GET', // *GET, POST, PUT, DELETE, etc.
