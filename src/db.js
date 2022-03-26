@@ -1,5 +1,9 @@
 var fs = require('fs');
 
+if (!fs.existsSync("./data")){
+  fs.mkdirSync("./data");
+}
+
 function verifFile(filename, defaultval = {}) {
   let path = `./data/${filename}.json`;
   if (!fs.existsSync(path)) {

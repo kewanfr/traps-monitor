@@ -3,7 +3,7 @@ const { exec } = require("child_process");
 const prompt = require("prompt-sync")({ sigint: true });
 var {bdd} = require("./db");
 
-var cert = fs.readdirSync("./cert/")[0] || false;
+var cert = fs.existsSync("./cert/") ? fs.readdirSync("./cert/")[0] || false : false;
 
 let args = process.argv.splice(2);
 var cmd = args.join(" ");
