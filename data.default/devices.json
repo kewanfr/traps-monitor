@@ -2,15 +2,15 @@
   "1": {
     "id": 1,
     "status": "offline",
-    "ip": "192.168.0.91",
-    "name": "TRAPS-01",
-    "disabled": false
+    "ip": "192.168.0.1",
+    "name": "DEVICE-01",
+    "disabled": true
   },
   "2": {
     "id": 2,
     "status": "offline",
-    "ip": "192.168.0.102",
-    "name": "TRAPS-02",
-    "disabled": false
+    "ip": "192.168.0.2",
+    "name": "DEVICE-02",
+    "disabled": true
   }
 }
