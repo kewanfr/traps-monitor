@@ -8,9 +8,9 @@ let pages = [
     v: "dashboard"
   },
   {
-    l: "Liste des Appareils",
-    n: "Appareils",
-    v: "devices"
+    l: "Paramètres",
+    n: "Configuration",
+    v: "config"
   },
 ]
 
@@ -22,7 +22,7 @@ function reloadNavbar() {
   navbar.innerHTML = "";
   for (let i in pages) {
     const page = pages[i];
-    let navItem = `<li><a href="/?${page.v}" ${pageUrl == page.v ? 'class="active"' : ''} id="devices-nav">${page.n}</a></li>`;
+    let navItem = `<li><a href="/?${page.v}" ${pageUrl == page.v ? 'class="active"' : ''} id="${page.v}-nav">${page.n}</a></li>`;
     navbar.insertAdjacentHTML("beforeend", navItem);
 
     let pageDiv = document.getElementById(`${page.v}-div`);
@@ -52,12 +52,13 @@ db.datas = {};
 db.devices = {};
 const socket = io();
 socket.on('update', function (msg) {
-  db.datas = msg;
+  db.datas = msg.data;
+  db.devices = msg.devices;
   if (pageUrl == "dashboard") refreshDatas();
 });
 socket.on('devices', function (msg) {
-  db.devices = msg;
-  if (pageUrl == "devices") refreshDevices();
+  db.devices = msg.devices;
+  if (pageUrl == "config") refreshDevices();
 });
 var baseUrl = window.location.origin;
 // var baseUrl = 'http://localhost:8000';
@@ -69,7 +70,6 @@ async function getData(url = '') {
 }
 
 async function postData(url = '', dat) {
-  console.log(dat);
   let options = {
     method: 'POST', // *GET, POST, PUT, DELETE, etc.
     body: JSON.stringify(dat),
@@ -83,7 +83,6 @@ async function postData(url = '', dat) {
 }
 
 async function postReq(url = '', dat) {
-  console.log(dat);
   let options = {
     method: 'POST', // *GET, POST, PUT, DELETE, etc.
     body: JSON.stringify(dat),
@@ -101,7 +100,7 @@ function updateValOne(id) {
   getData("/updateval/" + id);
 }
 
-function updateValTraps() {
+function updateValDevices() {
   console.log("Update Values all devices");
   getData("/updateval/");
 }
@@ -114,6 +113,11 @@ let box = document.querySelector("#flexbox-dashboard");
 async function refreshDatas() {
 
   box.innerHTML = "";
+  console.log(db);
+  if((Object.keys(db.datas).length <= 0 && Object.keys(db.devices).length <= 0)){
+    box.innerHTML = "Aucune Donnée";
+    return window.location.href = "/?config/?firstconfig";
+  }
   for (let d in db.datas) {
     const device = db.datas[d];
     var baticon, batcolor;
@@ -140,15 +144,17 @@ async function refreshDatas() {
           <div class="card">
             <div class="card-body">
               <h5 class="card-title">${device.name}</h5>
-              <h6 class="card-subtitle mb-2 text-${device.status == "online" ? "success" : device.disabled == true ? "muted" : "danger"}">${device.status == "online" ? "En ligne" : device.disabled == true ? "Désactivé" : "Hors Ligne"}</h6>
-              ${device.status == "online" ? `
+              <h6 class="card-subtitle mb-2 text-${device.status == "online" ? "success" : device.disabled == true ? "muted" : "danger"}">${device.status == "online" ? "En ligne" : device.disabled == true ? "Désactivé" : device.status == "error" ? "Erreur" : "Hors Ligne"}</h6>
+              
               <p class="card-text">
+              ${device.status == "error" && device.errormsg ? `<div class="text-danger">${device.errormsg}</div>` : ""}
+              ${device.status == "online" ? `
                 Batterie: ${device.battLevel}% <i class="fa-solid fa-battery-${baticon} text-${batcolor}"></i> <br>
                 Wifi: ${device.wifiLevel}dBm <i class="fad fa-wifi-2"></i></i> <br>
                 Maj: ${updateF}
+                ` : ""}
               </p>
-              ` : ""}
-              <a href="#" class="card-link" onclick="updateValOne(${device.id})">Mise à jour</a>
+              <a href="" class="card-link" onclick="updateValOne(${device.id})">Mise à jour</a>
             </div>
           </div>
         </div>
