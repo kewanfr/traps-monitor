@@ -18,11 +18,11 @@ async function updateValues() {
   bdd.get("devices").then((dat) =>{
     db.devices = dat;
   });
+  db.data = await getInfos();
   bdd.get("data").then((dat) =>{
     db.data = dat;
+    io.emit('update', db);
   });
-  db.data = await getInfos();
-  io.emit('update', db.data);
 }
 
 setTimeout(() => {
@@ -35,6 +35,8 @@ setInterval(() => {
 rl.on('line', function (line) {
   if (line == "data") {
     console.log(db.data);
+  } else if (line == "devices") {
+    console.log(db.devices);
   } else if (line == "update") {
     updateValues();
   } else if (line == "exit") {
@@ -92,12 +94,14 @@ app.get('/updateval', (req,res) => {
 
 app.get('/updateval/:id', async (req,res) => {
   const id = parseInt(req.params.id);
-  const device = Object.values(db.devices).find(d => d.id === id);
-  console.log(`Updating ${device.name}`);
-  let dev = await getInfo(device);
-  db.data[dev.id] = dev;
-  io.emit('update', db.data)
-  res.status(200).json(db.data)
+  const device = db.devices[id];
+  if(device){
+    console.log(`Updating ${device.name}`);
+    let dev = await getInfo(device);
+    db.data[dev.id] = dev;
+    io.emit('update', db);
+    res.status(200).json(db.data)
+  }
 })
 
 // établissement de la connexion
@@ -105,11 +109,12 @@ io.on('connection', (socket) => {
   console.log(`Connecté au client ${socket.id}`);
   bdd.get("devices").then((dat) =>{
     db.devices = dat;
-    io.emit('devices', db.devices);
+    io.emit('devices', db);
   });
-  setTimeout(() => {
-    io.emit('update', db.data);
-  }, 2000);
+  bdd.get("data").then((dat) =>{
+    db.data = dat;
+    io.emit('update', db);
+  });
 })
 
 // on change app par server
