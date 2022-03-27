@@ -80,7 +80,7 @@ var getInfo = (device, log = true) => {
       newDevice.lastUpdate = new Date();
       resolve(newDevice);
     }else {
-      exec(`ssh ${cert ? `-i ./cert/${cert}` : ""} -o ConnectTimeout=5 -p ${device.port || "2222"} ${device.ip} "cat /sys/class/power_supply/battery/capacity && cat /proc/net/wireless"`, (error, stdout, stderr) => {
+      exec(`ssh ${cert ? `-i ./cert/${cert}` : ""} -oStrictHostKeyChecking=no -o ConnectTimeout=5 -p ${device.port || "2222"} ${device.ip} "cat /sys/class/power_supply/battery/capacity && cat /proc/net/wireless"`, (error, stdout, stderr) => {
         if (error || stderr) {
           // if (error) console.log(`error: ${error.message}`);
           // if (stderr) console.error(`stderr: ${stderr}`);
