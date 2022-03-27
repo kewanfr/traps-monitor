@@ -10,7 +10,7 @@
     "socket.io": "^4.4.1"
   },
   "scripts": {
-    "test": "nome main.js 2",
+    "test": "node main.js",
     "start": "node main.js 1"
   },
   "author": "kewanb",
