@@ -45,8 +45,8 @@ h1 {
   position: relative;
   display: flex;
   flex-direction: column;
-  /* min-width: 0px; */
-  width: 10rem;
+  /* min-width: 10rem; */
+  /* min-width: 10rem; */
   overflow-wrap: break-word;
   background-color: rgb(255, 255, 255);
   background-clip: border-box;

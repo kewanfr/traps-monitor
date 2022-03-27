@@ -15,7 +15,7 @@
 
   <!-- <link rel="stylesheet" href="./src/all.min.css"> -->
   <link rel="stylesheet" href="./src/css/bootstrap.css">
-  <link rel="stylesheet" href="./src/css/devices.css">
+  <link rel="stylesheet" href="./src/css/config.css">
   <link rel="stylesheet" href="./src/css/dashboard.css">
 </head>
 <script>
@@ -31,63 +31,45 @@
 
     <h1 id="page-name">Dashboard</h1>
     <div id="dashboard-div">
-      <a href="#" class="card-link" onclick="updateValTraps()">Mise à jour</a>
+      <a href="" class="card-link" onclick="updateValDevices()">Mise à jour</a>
       <div class="flexbox" id="flexbox-dashboard">
       </div>
     </div>
-    <div class="container-lg" id="devices-div">
-      <div class="table-responsive">
-        <div class="table-wrapper">
-          <div class="table-title">
-            <div class="row">
-              <div class="col-sm-8">
-                <h2>Liste des TRAPS</h2>
-              </div>
-              <div class="col-sm-4">
-                <button type="button" class="btn btn-info add-new"><i class="fa fa-plus"></i> Add New</button>
+    <div class="container-lg" id="config-div">
+      <div id="configs-div">
+        
+      </div>
+
+      <div id="devices-div">
+
+        <div class="table-responsive">
+          <div class="table-wrapper">
+            <div class="table-title">
+              <div class="row">
+                <div class="col-sm-8">
+                  <h2>Appareils</h2>
+                </div>
+                <div class="col-sm-4">
+                  <button type="button" class="btn btn-info add-new"><i class="fa fa-plus"></i> Add New</button>
+                </div>
               </div>
             </div>
+            <table class="table table-bordered">
+              <thead>
+                <tr>
+                  <th>#</th>
+                  <th>Nom</th>
+                  <th>Ip</th>
+                  <th>Port SSH</th>
+                  <th>Desactiver</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                
+              </tbody>
+            </table>
           </div>
-          <table class="table table-bordered">
-            <thead>
-              <tr>
-                <th>#</th>
-                <th>Nom</th>
-                <th>Ip</th>
-                <th>Desactiver</th>
-                <th>Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-              
-              <tr id="2">
-                <td data-type="id">2</td>
-                <td>TRAPS-02</td>
-                <td>192.168.0.102</td>
-                <td data-type="checkbox"><input class="form-check-input" id="traps-checkbox" type="checkbox" data-original-title="checkbox"></td>
-                <td>
-                  <a class="add" title="" data-toggle="tooltip" data-original-title="Save"><i class="material-icons">save</i></a>
-                  <a class="edit" title="" data-toggle="tooltip" data-original-title="Edit"><i
-                      class="material-icons"></i></a>
-                  <a class="delete" title="" data-toggle="tooltip" data-original-title="Delete"><i
-                      class="material-icons"></i></a>
-                </td>
-              </tr>
-              <tr id="3">
-                <td data-type="id">3</td>
-                <td>TABLETTE</td>
-                <td>192.168.0.10</td>
-                <td data-type="checkbox"><input class="form-check-input" id="traps-checkbox" type="checkbox" data-original-title="checkbox"></td>
-                <td>
-                  <a class="add" title="" data-toggle="tooltip" data-original-title="Save"><i class="material-icons">save</i></a>
-                  <a class="edit" title="" data-toggle="tooltip" data-original-title="Edit"><i
-                      class="material-icons"></i></a>
-                  <a class="delete" title="" data-toggle="tooltip" data-original-title="Delete"><i
-                      class="material-icons"></i></a>
-                </td>
-              </tr>
-            </tbody>
-          </table>
         </div>
       </div>
     </div>
@@ -96,6 +78,6 @@
 <!-- <script src="https://cdn.jsdelivr.net/npm/chart.js@3.7.1/dist/chart.min.js"></script> -->
 <script src="/socket.io/socket.io.js"></script>
 <script src="./src/js/dashboard.js"></script>
-<script src="./src/js/devices.js"></script>
+<script src="./src/js/config.js"></script>
 
 </html>
