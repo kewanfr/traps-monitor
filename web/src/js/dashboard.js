@@ -14,7 +14,9 @@ let pages = [
   },
 ]
 
-var pageUrl = window.location.href.split("/?")[1] || "dashboard";
+let splithref = window.location.href.split("/?");
+var pageUrl = splithref[1] || "dashboard";
+var UrlArguments = splithref[2] || undefined;
 var actPage = pages.find((a) => a.v == pageUrl);
 
 let navbar = document.getElementById("navbar");
