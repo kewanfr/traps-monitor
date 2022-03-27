@@ -34,15 +34,20 @@ var getInfos = async (log = true) => {
   return new Promise((resolve, reject) => {
     var doneCntr = 0;
     var devicesArr = Object.values(db.devices);
-    devicesArr.forEach(async (device, index) => {
-      let dev = await getInfo(device, log);
-      newData[dev.id] = dev;
-      ++doneCntr;
-      if (doneCntr === devicesArr.length) {
-        bdd.set("data", newData);
-        resolve(newData);
-      }
-    });
+    if(!db.devices[1]){
+      bdd.set("data", newData);
+      resolve(newData);
+    }else {
+      devicesArr.forEach(async (device, index) => {
+        let dev = await getInfo(device, log);
+        newData[dev.id] = dev;
+        ++doneCntr;
+        if (doneCntr === devicesArr.length) {
+          bdd.set("data", newData);
+          resolve(newData);
+        }
+      });
+    }
   });
 }
 
@@ -72,17 +77,25 @@ var getInfo = (device, log = true) => {
   return new Promise((resolve, reject) => {
     if(device.disabled) {
       if(log) console.log(`${device.name} is disabled`);
+      newDevice.lastUpdate = new Date();
       resolve(newDevice);
     }else {
       exec(`ssh ${cert ? `-i ./cert/${cert}` : ""} -o ConnectTimeout=5 -p 2222 ${device.ip} "cat /sys/class/power_supply/battery/capacity && cat /proc/net/wireless"`, (error, stdout, stderr) => {
         if (error || stderr) {
           // if (error) console.log(`error: ${error.message}`);
           // if (stderr) console.error(`stderr: ${stderr}`);
-          newDevice.status = "offline";
           delete newDevice.battLevel;
           delete newDevice.wifiLevel;
           newDevice.lastUpdate = new Date();
           // db.data[newDevice.id] = newDevice;
+          if(stderr.includes("/capacity: Permission denied")){
+            console.log("Permission Error: Device incompatible");
+            newDevice.status = "error";
+            newDevice.errormsg = "Appareil incompatible (Version d'android trop récente)";
+          }else {
+            newDevice.status = "offline";
+            delete newDevice.errormsg;
+          }
           if(log) console.log(`${newDevice.name} Connection error`);
         } else {
           let lines = stdout.toString().split(/(\r?\n)/g);
@@ -92,6 +105,7 @@ var getInfo = (device, log = true) => {
           newDevice.lastUpdate = new Date();
           newDevice.battLevel = battLevel;
           newDevice.wifiLevel = wifiLevel;
+          delete newDevice.errormsg;
           // db.data[newDevice.id] = newDevice;
           if(log) console.log(`${newDevice.name} Connection successful`);
         }
