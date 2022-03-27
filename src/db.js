@@ -7,6 +7,9 @@ if (!fs.existsSync("./data")){
 function verifFile(filename, defaultval = {}) {
   let path = `./data/${filename}.json`;
   if (!fs.existsSync(path)) {
+    if(filename == "config"){
+      defaultval = require("./config").defaultconfig;
+    }
     fs.writeFileSync(path, JSON.stringify(defaultval), 'utf8');
     return true;
   }

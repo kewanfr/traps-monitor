@@ -45,8 +45,8 @@ rl.on('line', function (line) {
 });
 
 
-const host = 'localhost';
-const port = 8000;
+var host = 'localhost';
+var port = 8000;
 
 app.use(express.json())
 app.use(cors())
@@ -118,6 +118,10 @@ io.on('connection', (socket) => {
 })
 
 // on change app par server
-server.listen(port, () => {
-console.log(`Votre app est disponible sur http://${host}:${port}`)
-})
+bdd.get("config").then((dat) =>{
+  port = dat.port;
+  host = dat.host;
+  server.listen(port, () => {
+    console.log(`Votre app est disponible sur http://${host}:${port}`)
+  })
+});
