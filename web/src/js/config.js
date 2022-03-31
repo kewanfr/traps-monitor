@@ -3,6 +3,11 @@ var actions =
   `<a class="add"><i class="material-icons">save</i></a>` + //  - data-toggle="tooltip" data-original-title="Save"
   `<a class="edit"><i class="material-icons"></i></a>` + //  - data-toggle="tooltip" data-original-title="Edit"
   `<a class="delete"><i class="material-icons"></i></a>`; //  - data-toggle="tooltip" data-original-title="Delete"
+
+inputSize = (i) => {
+  i.style = "max-width: "+ (parseInt(i.value.length) + 3) + "ch;";
+}
+
 refreshDevices = () => {
   tbody.innerHTML = '';
   for (let i in db.devices) {
@@ -23,13 +28,29 @@ refreshDevices = () => {
   }
 }
 
+var hostdomain = document.querySelector("#hostdomain");
+var hostport = document.querySelector("#hostport");
+refreshConfig = () => {
+  console.log(hostdomain.value);
+  console.log(hostport.value);
+  console.log(db.config);
+  hostdomain.value = db.config.host;
+  hostport.value = db.config.port;
+  inputSize(hostdomain)
+  inputSize(hostport)
+}
+
+updateHost = () => {
+  postReq("/updateconfig", {host: hostdomain.value, port: hostport.value});
+}
+
 if (pageUrl == "config") {
   if(UrlArguments && UrlArguments.includes("firstconfig")){
     
   }
   $(document).ready(function () {
     
-    $('[data-toggle="tooltip"]').tooltip();
+    // $('[data-toggle="tooltip"]').tooltip();
     // var actions = $("table td:last-child").html();
     
     // Append table with add row form on add new button click

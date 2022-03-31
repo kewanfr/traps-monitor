@@ -67,6 +67,14 @@ app.post('/updatedevice', (req,res) => {
   res.status(200).json({status: "OK"});
 })
 
+app.post('/updateconfig', (req,res) => {
+  let reqData = req.body;
+  db.config.host = reqData.host;
+  db.config.port = reqData.port;
+  bdd.set("config", db.config);
+  res.status(200).json({status: "OK"});
+})
+
 app.get('/disabledevice/:id/:state', (req,res) => {
   const id = parseInt(req.params.id);
   const state = req.params.state;
@@ -114,6 +122,10 @@ io.on('connection', (socket) => {
   bdd.get("data").then((dat) =>{
     db.data = dat;
     io.emit('update', db);
+  });
+  bdd.get("config").then((dat) =>{
+    db.config = dat;
+    io.emit('config', db);
   });
 })
 

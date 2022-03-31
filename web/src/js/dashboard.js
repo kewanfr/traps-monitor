@@ -52,6 +52,7 @@ setPageName()
 const db = {};
 db.datas = {};
 db.devices = {};
+db.config = {};
 const socket = io();
 socket.on('update', function (msg) {
   db.datas = msg.data;
@@ -61,6 +62,10 @@ socket.on('update', function (msg) {
 socket.on('devices', function (msg) {
   db.devices = msg.devices;
   if (pageUrl == "config") refreshDevices();
+});
+socket.on('config', function (msg) {
+  db.config = msg.config;
+  if (pageUrl == "config") refreshConfig();
 });
 var baseUrl = window.location.origin;
 // var baseUrl = 'http://localhost:8000';
