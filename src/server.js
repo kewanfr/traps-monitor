@@ -72,6 +72,7 @@ app.post('/updateconfig', (req,res) => {
   db.config.host = reqData.host;
   db.config.port = reqData.port;
   bdd.set("config", db.config);
+  console.log(`Host updated: http://${db.config.host}:${db.config.port} !`);
   res.status(200).json({status: "OK"});
 })
 

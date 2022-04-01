@@ -31,9 +31,6 @@ refreshDevices = () => {
 var hostdomain = document.querySelector("#hostdomain");
 var hostport = document.querySelector("#hostport");
 refreshConfig = () => {
-  console.log(hostdomain.value);
-  console.log(hostport.value);
-  console.log(db.config);
   hostdomain.value = db.config.host;
   hostport.value = db.config.port;
   inputSize(hostdomain)
@@ -42,6 +39,7 @@ refreshConfig = () => {
 
 updateHost = () => {
   postReq("/updateconfig", {host: hostdomain.value, port: hostport.value});
+  newFlashMsg("Adresse de connexion mise à jour avec succès");
 }
 
 if (pageUrl == "config") {
@@ -98,6 +96,7 @@ if (pageUrl == "config") {
           disabled: checkbox.is(':checked')
         }
         postData("/updatedevice", device);
+        newFlashMsg(`Appareil ${inputs[0]} mis à jour !`);
         db.devices[device.id] = device;
         $(this).parents("tr").find(".add, .edit").toggle();
         $(".add-new").removeAttr("disabled");
@@ -124,11 +123,15 @@ if (pageUrl == "config") {
     // Delete row on delete button click
     $(document).on("click", ".delete", function () {
       let id = $(this).parents("tr").find('td:first-child').html();
-      $(this).parents("tr").remove();
-      $(".add-new").removeAttr("disabled");
-      if(db.devices[id]){
-        delete db.devices[id];
-        getData(`/deletedevice/${id}`);
+      let name = $(this).parents("tr").find('td:nth-child(2)').html();
+      if(confirm(`Supprimer l'appareil ${name} ?`)) {
+        $(this).parents("tr").remove();
+        $(".add-new").removeAttr("disabled");
+        if(db.devices[id]){
+          delete db.devices[id];
+          getData(`/deletedevice/${id}`);
+        }
+        newFlashMsg(`Appareil ${name} supprimé !`);
       }
     });
   });

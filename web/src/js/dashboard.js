@@ -53,6 +53,7 @@ const db = {};
 db.datas = {};
 db.devices = {};
 db.config = {};
+db.flash = [];
 const socket = io();
 socket.on('update', function (msg) {
   db.datas = msg.data;
@@ -120,7 +121,6 @@ let box = document.querySelector("#flexbox-dashboard");
 async function refreshDatas() {
 
   box.innerHTML = "";
-  console.log(db);
   if((Object.keys(db.datas).length <= 0 && Object.keys(db.devices).length <= 0)){
     box.innerHTML = "Aucune Donnée";
     return window.location.href = "/?config/?firstconfig";
