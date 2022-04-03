@@ -73,6 +73,10 @@ app.post('/updateconfig', (req,res) => {
   db.config.port = reqData.port;
   bdd.set("config", db.config);
   console.log(`Host updated: http://${db.config.host}:${db.config.port} !`);
+  server.close();
+  server.listen(db.config.port, () => {
+    console.log(`Votre app est disponible sur http://${db.config.host}:${db.config.port}`)
+  })
   res.status(200).json({status: "OK"});
 })
 
@@ -104,12 +108,19 @@ app.get('/updateval', (req,res) => {
 app.get('/updateval/:id', async (req,res) => {
   const id = parseInt(req.params.id);
   const device = db.devices[id];
-  if(device){
+  if(!device){
+    delete db.data[id];
+    delete db.devices[id];
+    bdd.set("data", db.data);
+    io.emit('update', db);
+    res.status(200).json(db.data);
+  }else {
     console.log(`Updating ${device.name}`);
     let dev = await getInfo(device);
     db.data[dev.id] = dev;
+    bdd.set("data", db.data);
     io.emit('update', db);
-    res.status(200).json(db.data)
+    res.status(200).json(db.data);
   }
 })
 

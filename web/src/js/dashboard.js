@@ -15,8 +15,8 @@ let pages = [
 ]
 
 let splithref = window.location.href.split("/?");
-var pageUrl = splithref[1] || "dashboard";
-var UrlArguments = splithref[2] || undefined;
+var pageUrl = pages.find((a) => a.v == splithref[1]) ? splithref[1] : "dashboard";
+var UrlArguments = pages.find((a) => a.v == splithref[1]) ? splithref[2] : splithref[1] || undefined;
 var actPage = pages.find((a) => a.v == pageUrl);
 
 let navbar = document.getElementById("navbar");
@@ -117,13 +117,19 @@ function updateValDevices() {
 // ------------------------ DASHBOARD ------------------------
 let box = document.querySelector("#flexbox-dashboard");
 
+if(UrlArguments && UrlArguments.includes("hostupdated")){
+  updateFlashMsg("Adresse de connexion mise à jour avec succès !");
+}
 
 async function refreshDatas() {
-
   box.innerHTML = "";
-  if((Object.keys(db.datas).length <= 0 && Object.keys(db.devices).length <= 0)){
-    box.innerHTML = "Aucune Donnée";
-    return window.location.href = "/?config/?firstconfig";
+  if(Object.keys(db.datas).length <= 0){
+    if(Object.keys(db.devices).length <= 0){
+      box.innerHTML = "Aucune Donnée";
+      return window.location.href = "/?config/?firstconfig";
+    }else {
+      updateValDevices();
+    }
   }
   for (let d in db.datas) {
     const device = db.datas[d];

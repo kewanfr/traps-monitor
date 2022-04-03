@@ -1,6 +1,5 @@
 var msgFlash = document.querySelector(".messages-flash");
 flashMsg = () => {
-  // msgFlash.innerHTML = "";
   db.flash.forEach((f) => {
     let msg = `
     <div class="alert alert-${f.t} flashmsh" role="alert">
@@ -14,9 +13,19 @@ flashMsg = () => {
   })
 }
 
+resetFlashMsg = () => {
+  msgFlash.innerHTML = "";
+  db.flash = [];
+}
+
 newFlashMsg = (msg, type = "success") => {
   db.flash.push({msg, t: type});
   flashMsg();
+}
+
+updateFlashMsg = (msg, type = "success") => {
+  resetFlashMsg();
+  newFlashMsg(msg, type);
 }
 
 closeFlashMsg = () => {

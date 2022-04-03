@@ -32,6 +32,7 @@
   <div class="container">
 
     <h1 id="page-name">Dashboard</h1>
+    <div class="messages-flash"></div>
     <div id="dashboard-div">
       <a href="" class="card-link" onclick="updateValDevices()">Mise à jour</a>
       <div class="flexbox" id="flexbox-dashboard">
@@ -40,15 +41,6 @@
     <div id="config-div">
       <!-- <div class="container-lg" id="config-div"> -->
       <div id="settings-div" class="container">
-        
-        <div class="messages-flash">
-          <!-- <div class="alert alert-success flashmsh" role="alert">
-            Adresse de connexion mise à jour avec succès
-            <button type="button" class="close-btn" data-dismiss="alert" aria-label="Close">
-              <span aria-hidden="true">×</span>
-            </button>
-          </div> -->
-        </div>
         <h2>Configuration</h2>
         <label for="hostdomain">Adresse du serveur</label>
         <div class="input-group mb-3" id="host">
@@ -100,8 +92,8 @@
 </body>
 <!-- <script src="https://cdn.jsdelivr.net/npm/chart.js@3.7.1/dist/chart.min.js"></script> -->
 <script src="/socket.io/socket.io.js"></script>
+<script src="./src/js/general.js"></script>
 <script src="./src/js/dashboard.js"></script>
 <script src="./src/js/config.js"></script>
-<script src="./src/js/general.js"></script>
 
 </html>

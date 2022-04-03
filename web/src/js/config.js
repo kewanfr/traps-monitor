@@ -10,21 +10,26 @@ inputSize = (i) => {
 
 refreshDevices = () => {
   tbody.innerHTML = '';
-  for (let i in db.devices) {
-    const device = db.devices[i];
-    let element = `
-    <tr id="${device.id}" ${device.disabled ? 'class="text-muted"' : ''}>
-      <td data-type="id">${device.id}</td>
-      <td>${device.name}</td>
-      <td>${device.ip}</td>
-      <td>${device.port || "2222"}</td>
-      <td data-type="checkbox"><input class="form-check-input" id="device-checkbox" type="checkbox" data-original-title="checkbox" ${device.disabled ? 'checked' : ''}></td>
-      <td>
-        ${actions}
-      </td>
-    </tr>
-    `;
-    tbody.innerHTML += element;
+  if(Object.keys(db.devices).length <= 0){
+    tbody.innerHTML = "Aucun Appareil";
+    updateFlashMsg("Vous n'avez aucun appareil de configuré, veuillez en créer un !", "danger");
+  }else {
+    for (let i in db.devices) {
+      const device = db.devices[i];
+      let element = `
+      <tr id="${device.id}" ${device.disabled ? 'class="text-muted"' : ''}>
+        <td data-type="id">${device.id}</td>
+        <td>${device.name}</td>
+        <td>${device.ip}</td>
+        <td>${device.port || "2222"}</td>
+        <td data-type="checkbox"><input class="form-check-input" id="device-checkbox" type="checkbox" data-original-title="checkbox" ${device.disabled ? 'checked' : ''}></td>
+        <td>
+          ${actions}
+        </td>
+      </tr>
+      `;
+      tbody.innerHTML += element;
+    }
   }
 }
 
@@ -39,17 +44,15 @@ refreshConfig = () => {
 
 updateHost = () => {
   postReq("/updateconfig", {host: hostdomain.value, port: hostport.value});
-  newFlashMsg("Adresse de connexion mise à jour avec succès");
+  updateFlashMsg("Adresse de connexion mise à jour avec succès !");
+  window.location.href = `http://${hostdomain.value}:${hostport.value}/?config/?hostupdated`;
 }
 
 if (pageUrl == "config") {
   if(UrlArguments && UrlArguments.includes("firstconfig")){
-    
+    updateFlashMsg("Vous n'avez aucun appareil de configuré, veuillez en créer un !", "danger");
   }
   $(document).ready(function () {
-    
-    // $('[data-toggle="tooltip"]').tooltip();
-    // var actions = $("table td:last-child").html();
     
     // Append table with add row form on add new button click
     $(".add-new").click(function () {
@@ -96,7 +99,7 @@ if (pageUrl == "config") {
           disabled: checkbox.is(':checked')
         }
         postData("/updatedevice", device);
-        newFlashMsg(`Appareil ${inputs[0]} mis à jour !`);
+        updateFlashMsg(`Appareil ${inputs[0]} mis à jour !`);
         db.devices[device.id] = device;
         $(this).parents("tr").find(".add, .edit").toggle();
         $(".add-new").removeAttr("disabled");
@@ -123,7 +126,7 @@ if (pageUrl == "config") {
     // Delete row on delete button click
     $(document).on("click", ".delete", function () {
       let id = $(this).parents("tr").find('td:first-child').html();
-      let name = $(this).parents("tr").find('td:nth-child(2)').html();
+      let name = db.devices[id].name;
       if(confirm(`Supprimer l'appareil ${name} ?`)) {
         $(this).parents("tr").remove();
         $(".add-new").removeAttr("disabled");
@@ -131,7 +134,7 @@ if (pageUrl == "config") {
           delete db.devices[id];
           getData(`/deletedevice/${id}`);
         }
-        newFlashMsg(`Appareil ${name} supprimé !`);
+        updateFlashMsg(`Appareil ${name} supprimé !`);
       }
     });
   });
