@@ -12,7 +12,7 @@ refreshDevices = () => {
   tbody.innerHTML = '';
   if(Object.keys(db.devices).length <= 0){
     tbody.innerHTML = "Aucun Appareil";
-    updateFlashMsg("Vous n'avez aucun appareil de configuré, veuillez en créer un !", "danger");
+    updateFlashMsg("Vous n'avez aucun appareil de configuré, veuillez en créer un !", "warning");
   }else {
     for (let i in db.devices) {
       const device = db.devices[i];
@@ -50,7 +50,7 @@ updateHost = () => {
 
 if (pageUrl == "config") {
   if(UrlArguments && UrlArguments.includes("firstconfig")){
-    updateFlashMsg("Vous n'avez aucun appareil de configuré, veuillez en créer un !", "danger");
+    updateFlashMsg("Vous n'avez aucun appareil de configuré, veuillez en créer un !", "warning");
   }
   $(document).ready(function () {
     
